@@ -1,3 +1,8 @@
+using Demo.DAL.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 namespace Demo.PL
 {
     public class Program
@@ -8,6 +13,11 @@ namespace Demo.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //builder.Services.AddScoped<AppDbcontext>(); //Allo DI for AppDbcontext
+            builder.Services.AddDbContext<AppDbcontext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaiultConnection"));
+            });
 
             var app = builder.Build();
 
