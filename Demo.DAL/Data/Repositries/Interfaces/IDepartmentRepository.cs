@@ -11,7 +11,7 @@ namespace Demo.DAL.Data.Repositries.Interfaces
     public interface IDepartmentRepository
     {
         //Get All
-        IEnumerable<Department> GetAll(bool withtracking);
+        IEnumerable<Department> GetAll(bool withtracking = false);
         //GetById
         Department GetById(int id);
         //Update
