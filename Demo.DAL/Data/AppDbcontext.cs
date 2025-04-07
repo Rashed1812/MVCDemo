@@ -25,6 +25,6 @@ namespace Demo.DAL.Data
             //modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations());
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //Run and Apply Configuration What is Running At Time
         }
-        public DbSet<Department> Departments { get; set; } //Create Rable In Database
+        public DbSet<Department> Departments { get; set; } //Create Table In Database
     }
 }

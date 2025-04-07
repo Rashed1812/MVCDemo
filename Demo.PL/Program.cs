@@ -1,4 +1,7 @@
+using Demo.BLL.Services;
 using Demo.DAL.Data;
+using Demo.DAL.Data.Repositries.Classes;
+using Demo.DAL.Data.Repositries.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -19,6 +22,9 @@ namespace Demo.PL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaiultConnection"));
             });
 
+            //Register To Allow DI In Department Repository
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepositry>();
+            builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

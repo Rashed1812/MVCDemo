@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DAL.Data.Repositries.Classes
 {
-    public class DepartmentRepositry(AppDbcontext dbcontext) : IDepartmentRepository
+    public class DepartmentRepositry(AppDbcontext _dbcontext) : IDepartmentRepository
     {
-        private readonly AppDbcontext _dbcontext = dbcontext; // Intialize Null
+        //private readonly AppDbcontext _dbcontext = dbcontext; // Intialize Null
 
         public int Add(Department Entity)
         {
