@@ -17,6 +17,7 @@ namespace Demo.BLL.Services
         public IEnumerable<DepartmentDto> GetAllDepartments()
         {
             var departments = _departmentRepository.GetAll();
+            #region Manual Mapping
             //1..Manual Mapping
             //var departmentsToReturn = departments.Select(D => new DepartmentDto()
             //{
@@ -26,7 +27,8 @@ namespace Demo.BLL.Services
             //    Description = D.Description,
             //    DateOfCreation = DateOnly.FromDateTime(D.CreatedOn.Value)
             //});
-            //return departmentsToReturn;
+            //return departmentsToReturn; 
+            #endregion
 
             //2..Using Extinsion Method
             return departments.Select(D => D.ToDepartmentDto());
@@ -36,6 +38,7 @@ namespace Demo.BLL.Services
         public DepartmentDetailsDto? GetDepartmentById(int id)
         {
             var department = _departmentRepository.GetById(id);
+            #region Manual Mapping
             //if (department == null)
             //{
             //    return null;
@@ -61,7 +64,8 @@ namespace Demo.BLL.Services
             //    Description = department.Description,
             //    CreatedBy = department.CreatedBy,
             //    CreatedOn = DateOnly.FromDateTime(department.CreatedOn.Value)
-            //};
+            //}; 
+            #endregion
 
             //2..Using Extinsion Method
             return department is null ? null : department.ToDepartmentDetailsDto();

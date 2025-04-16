@@ -5,7 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Demo.DAL.Data.Configurations;
-using Demo.DAL.Models;
+using Demo.DAL.Models.DepartmentModel;
+using Demo.DAL.Models.EmployeeModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DAL.Data
@@ -26,5 +27,6 @@ namespace Demo.DAL.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); //Run and Apply Configuration What is Running At Time
         }
         public DbSet<Department> Departments { get; set; } //Create Table In Database
+        public DbSet<Employee> Employees { get; set; } //Create Table In Database
     }
 }
