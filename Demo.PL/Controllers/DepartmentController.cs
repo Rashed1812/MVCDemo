@@ -23,7 +23,7 @@ namespace Demo.PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto departmentDto)
+        public IActionResult Create(CreatedDepartmentDto departmentDto) 
         {
             if(ModelState.IsValid) //Server Side Validation
             {
@@ -140,6 +140,7 @@ namespace Demo.PL.Controllers
         #endregion
 
         #region Delete Department
+
         //[HttpGet]
         //public IActionResult Delete(int? id)
         //{
