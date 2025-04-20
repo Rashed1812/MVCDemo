@@ -36,17 +36,15 @@ namespace Demo.PL.Controllers
                         DateOfCreation = departmentViewModel.DateOfCreation,
                         Description = departmentViewModel.Description
                     };
-                    //First step Add Department in db and check Row Effictive Result
                     var result =  _departmentsServices.AddDepartment(departmentDto);
-                    //result > 0 means the department is created successfully
+                    string Message;
                     if (result > 0)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
+                        Message = $"Department {departmentViewModel.Name} Is Created Successfully";
                     else
-                    {
-                        ModelState.AddModelError(string.Empty, "Failed to create department");
-                    }
+                        Message = $"Department {departmentViewModel.Name} Is Not Created";
+
+                    TempData["Message"] = Message;
+                    return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)
                 {
