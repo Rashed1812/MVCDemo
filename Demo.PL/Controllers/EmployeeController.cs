@@ -3,6 +3,7 @@ using Demo.BLL.DTO.Employee_DTO;
 using Demo.BLL.Services.Employee_Services;
 using Demo.DAL.Models.EmployeeModel;
 using Demo.DAL.Models.Shared;
+using Demo.PL.Models.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PL.Controllers
@@ -23,12 +24,29 @@ namespace Demo.PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreatedEmployeeDto employeeDto)
+        public IActionResult Create(EmployeeViewModel employeeViewModel)
         {
+
             if (ModelState.IsValid) //Server Side Validation
             {
                 try
                 {
+                    var employeeDto = new CreatedEmployeeDto()
+                    {
+                        Name = employeeViewModel.Name,
+                        Age = employeeViewModel.Age,
+                        Address = employeeViewModel.Address,
+                        IsActive = employeeViewModel.IsActive,
+                        Salary = employeeViewModel.Salary,
+                        Email = employeeViewModel.Email,
+                        PhoneNumber = employeeViewModel.PhoneNumber,
+                        HiringDate = employeeViewModel.HiringDate,
+                        Gender = employeeViewModel.Gender,
+                        EmployeeType = employeeViewModel.EmployeeType,
+                        CreatedBy = 1,
+                        LastModifiedBy = 1
+                    };
+
                     //First step Add Department in db and check Row Effictive Result
                     var result = _employeeServices.AddEmployee(employeeDto);
                     //result > 0 means the department is created successfully
@@ -56,7 +74,7 @@ namespace Demo.PL.Controllers
                     }
                 }
             }
-            return View(employeeDto);
+            return View(employeeViewModel);
         }
         #endregion
 
@@ -87,7 +105,7 @@ namespace Demo.PL.Controllers
             var employee = _employeeServices.GetEmployeeById(id.Value);
             if (employee == null)
                 return NotFound();
-            var employeeDto = new UpdateEmployeeDto()
+            var employeeViewModel = new EmployeeViewModel()
             {
                 Id = employee.Id,
                 Name = employee.Name,
@@ -101,20 +119,35 @@ namespace Demo.PL.Controllers
                 Gender =Enum.Parse<Gender>( employee.Gender),
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType)
             };
-            return View(employeeDto);
+            return View(employeeViewModel);
         }
+
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Edit([FromRoute] int? id, UpdateEmployeeDto employeeDto)
+        public IActionResult Edit([FromRoute] int? id, EmployeeViewModel employeeViewModel)
         {
-            if (!id.HasValue || id != employeeDto.Id)
+            if (!id.HasValue || id != employeeViewModel.Id)
                 return BadRequest();
 
-            if (!ModelState.IsValid) return View(employeeDto);
+            if (!ModelState.IsValid) return View(employeeViewModel);
 
             try
             {
-                var result = _employeeServices.UpdateEmployee(employeeDto);
+                var employeeUpdatedDto = new UpdateEmployeeDto()
+                {
+                    Name = employeeViewModel.Name,
+                    Age = employeeViewModel.Age,
+                    Address = employeeViewModel.Address,
+                    IsActive = employeeViewModel.IsActive,
+                    Salary = employeeViewModel.Salary,
+                    Email = employeeViewModel.Email,
+                    PhoneNumber = employeeViewModel.PhoneNumber,
+                    HiringDate = employeeViewModel.HiringDate,
+                    Gender = employeeViewModel.Gender,
+                    EmployeeType = employeeViewModel.EmployeeType,
+                };
+
+                var result = _employeeServices.UpdateEmployee(employeeUpdatedDto);
                 if (result > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -122,7 +155,7 @@ namespace Demo.PL.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Failed to update Employee");
-                    return View(employeeDto);
+                    return View(employeeViewModel);
                 }
             }
             catch (Exception ex)
@@ -132,7 +165,7 @@ namespace Demo.PL.Controllers
                 {
                     //1.Handle erro In Environment Case
                     ModelState.AddModelError(string.Empty, ex.Message);
-                    return View(employeeDto);
+                    return View(employeeViewModel);
 
                 }
                 else

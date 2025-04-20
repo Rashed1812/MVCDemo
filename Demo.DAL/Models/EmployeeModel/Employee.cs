@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Demo.DAL.Models.DepartmentModel;
 using Demo.DAL.Models.Shared;
 
 namespace Demo.DAL.Models.EmployeeModel
@@ -19,5 +20,7 @@ namespace Demo.DAL.Models.EmployeeModel
         public DateTime HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public int? DepartmentId { get; set; }
+        public Department? Department { get; set; }
     }
 }
