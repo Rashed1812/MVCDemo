@@ -1,6 +1,6 @@
 ﻿using Demo.BLL.DTO.Department_DTO;
 using Demo.BLL.Services;
-using Demo.PL.Models;
+using Demo.PL.Models.Depaartment;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PL.Controllers
@@ -23,12 +23,19 @@ namespace Demo.PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto departmentDto) 
+        public IActionResult Create(DepartmentViewModel departmentViewModel) 
         {
             if(ModelState.IsValid) //Server Side Validation
             {
                 try
                 {
+                    var departmentDto = new CreatedDepartmentDto()
+                    {
+                        Name = departmentViewModel.Name,
+                        Code = departmentViewModel.Code,
+                        DateOfCreation = departmentViewModel.DateOfCreation,
+                        Description = departmentViewModel.Description
+                    };
                     //First step Add Department in db and check Row Effictive Result
                     var result =  _departmentsServices.AddDepartment(departmentDto);
                     //result > 0 means the department is created successfully
@@ -56,7 +63,7 @@ namespace Demo.PL.Controllers
                     }
                 }
             }
-            return View(departmentDto);
+            return View(departmentViewModel);
         }
         #endregion
 
@@ -83,9 +90,8 @@ namespace Demo.PL.Controllers
             var department = _departmentsServices.GetDepartmentById(id.Value);
             if (department is null)
                 return NotFound();
-            var departmentViewModel = new DepartmentEditViewModel()
+            var departmentViewModel = new DepartmentViewModel()
             {
-                //Id = department.Id,
                 Name = department.Name,
                 Code = department.Code,
                 DateOfCreation = department.CreatedOn,
@@ -97,7 +103,7 @@ namespace Demo.PL.Controllers
         
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public IActionResult Edit([FromRoute] int? id,DepartmentEditViewModel viewModel)
+        public IActionResult Edit([FromRoute] int? id,DepartmentViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View(viewModel);

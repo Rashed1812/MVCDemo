@@ -1,4 +1,4 @@
-﻿namespace Demo.PL.Models
+﻿namespace Demo.PL.Models.Depaartment
 {
     public class DepartmentEditViewModel
     {

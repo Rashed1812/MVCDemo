@@ -15,7 +15,11 @@ namespace Demo.DAL.Data.Configurations
         {
             builder.Property(D=>D.Id).UseIdentityColumn(10,10);
             builder.Property(D=>D.Name).HasColumnType("varchar(20)");
-            
+            builder.HasMany(D => D.Employees)
+                   .WithOne(E => E.Department)
+                   .HasForeignKey(E => E.DepartmentId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
             //Use Bae To Call Configuration In Base Entity
             base.Configure(builder);
 
