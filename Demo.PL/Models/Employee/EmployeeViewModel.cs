@@ -6,7 +6,6 @@ namespace Demo.PL.Models.Employee
 {
     public class EmployeeViewModel
     {
-        public int Id { get; set; }
         [Required]
         [MaxLength(50, ErrorMessage = "Max Length Should be 50 Charcter")]
         [MinLength(3, ErrorMessage = "Min Length Should be More Than 5 Charcter")]
@@ -30,5 +29,7 @@ namespace Demo.PL.Models.Employee
         public EmployeeType EmployeeType { get; set; }
         public int CreatedBy { get; set; }
         public int LastModifiedBy { get; set; }
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; }
     }
 }

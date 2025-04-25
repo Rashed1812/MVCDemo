@@ -22,14 +22,17 @@ namespace Demo.PL
             builder.Services.AddDbContext<AppDbcontext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaiultConnection"));
+                options.UseLazyLoadingProxies();
+
             });
 
             //Register To Allow DI In Department Repository
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepositry>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepositry>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -36,5 +36,6 @@ namespace Demo.BLL.DTO.Employee_DTO
         public EmployeeType EmployeeType { get; set; }
         public int CreatedBy { get; set; }
         public int LastModifiedBy { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }

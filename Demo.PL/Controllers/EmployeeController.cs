@@ -1,5 +1,6 @@
 ﻿using Demo.BLL.DTO.Department_DTO;
 using Demo.BLL.DTO.Employee_DTO;
+using Demo.BLL.Services;
 using Demo.BLL.Services.Employee_Services;
 using Demo.DAL.Models.EmployeeModel;
 using Demo.DAL.Models.Shared;
@@ -11,9 +12,17 @@ namespace Demo.PL.Controllers
     public class EmployeeController(IEmployeeServices _employeeServices , IWebHostEnvironment _environment, 
         ILogger<EmployeeController> _logger) : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string? EmployeeSearchName)
         {
-            var Employees = _employeeServices.GetAllEmployees(false);
+            dynamic Employees = null!;
+            if (string.IsNullOrEmpty(EmployeeSearchName))
+            {
+                 Employees = _employeeServices.GetAllEmployees();
+            }
+            else
+            {
+                Employees = _employeeServices.SearchEmployeesByName(EmployeeSearchName);
+            }
             return View(Employees);
         }
 
@@ -43,8 +52,7 @@ namespace Demo.PL.Controllers
                         HiringDate = employeeViewModel.HiringDate,
                         Gender = employeeViewModel.Gender,
                         EmployeeType = employeeViewModel.EmployeeType,
-                        CreatedBy = 1,
-                        LastModifiedBy = 1
+                        DepartmentId = employeeViewModel.DepartmentId
                     };
 
                     //First step Add Department in db and check Row Effictive Result
@@ -107,7 +115,6 @@ namespace Demo.PL.Controllers
                 return NotFound();
             var employeeViewModel = new EmployeeViewModel()
             {
-                Id = employee.Id,
                 Name = employee.Name,
                 Age = employee.Age,
                 Address = employee.Address,
@@ -117,7 +124,9 @@ namespace Demo.PL.Controllers
                 PhoneNumber = employee.PhoneNumber,
                 HiringDate = employee.HiringDate,
                 Gender =Enum.Parse<Gender>( employee.Gender),
-                EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType)
+                EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
+                DepartmentId = employee.DepartmentId,
+
             };
             return View(employeeViewModel);
         }
@@ -126,7 +135,7 @@ namespace Demo.PL.Controllers
         [HttpPost]
         public IActionResult Edit([FromRoute] int? id, EmployeeViewModel employeeViewModel)
         {
-            if (!id.HasValue || id != employeeViewModel.Id)
+            if (!id.HasValue )
                 return BadRequest();
 
             if (!ModelState.IsValid) return View(employeeViewModel);
@@ -135,6 +144,7 @@ namespace Demo.PL.Controllers
             {
                 var employeeUpdatedDto = new UpdateEmployeeDto()
                 {
+                    Id = id.Value,
                     Name = employeeViewModel.Name,
                     Age = employeeViewModel.Age,
                     Address = employeeViewModel.Address,
@@ -145,6 +155,7 @@ namespace Demo.PL.Controllers
                     HiringDate = employeeViewModel.HiringDate,
                     Gender = employeeViewModel.Gender,
                     EmployeeType = employeeViewModel.EmployeeType,
+                    DepartmentId = employeeViewModel.DepartmentId
                 };
 
                 var result = _employeeServices.UpdateEmployee(employeeUpdatedDto);

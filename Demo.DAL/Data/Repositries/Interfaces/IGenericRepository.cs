@@ -11,8 +11,8 @@ namespace Demo.DAL.Data.Repositries.Interfaces
     {
         IEnumerable<TEntity> GetAll(bool withtracking = false);
         TEntity? GetById(int id);
-        int Add(TEntity Entity);
-        int Update(TEntity Entity);
-        int Delete(TEntity Entity);
+        void Add(TEntity Entity);
+        void Update(TEntity Entity);
+        void Delete(TEntity Entity);
     }
 }
