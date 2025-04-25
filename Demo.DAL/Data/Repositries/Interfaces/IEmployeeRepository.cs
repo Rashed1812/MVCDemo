@@ -7,12 +7,8 @@ using Demo.DAL.Models.EmployeeModel;
 
 namespace Demo.DAL.Data.Repositries.Interfaces
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository :IGenericRepository<Employee>
     {
-        IEnumerable<Employee> GetAll(bool withtracking = false);
-        Employee? GetById(int id);
-        int Add(Employee Employee);
-        int Update(Employee Employee);
-        int Delete(Employee Employee);
+        IQueryable<Employee> GetEmployeeByName(string name);
     }
 }

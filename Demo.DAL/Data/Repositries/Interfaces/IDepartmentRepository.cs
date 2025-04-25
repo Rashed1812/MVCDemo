@@ -15,11 +15,11 @@ namespace Demo.DAL.Data.Repositries.Interfaces
         //GetById
         Department GetById(int id);
         //Update
-        int Update (Department Entity);
+        void Update (Department Entity);
         //Delete
-        int Delete (Department Entity);
+        void Delete (Department Entity);
         //Insert
-        int Add (Department Entity);
+        void Add (Department Entity);
         //Return int To Check from DB How Many Row is Efficted 
     }
 }

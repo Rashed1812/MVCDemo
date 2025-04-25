@@ -10,7 +10,8 @@ namespace Demo.BLL.Services.Employee_Services
 {
     public interface IEmployeeServices
     {
-        IEnumerable<EmployeeDto> GetAllEmployees(bool WithTracking); 
+        IEnumerable<EmployeeDto> GetAllEmployees(bool WithTracking = false); 
+        IEnumerable<EmployeeDto> SearchEmployeesByName(string name);
         int AddEmployee(CreatedEmployeeDto employeeDto);
         bool DeleteEmployee(int id);
         EmployeeDetailsDto? GetEmployeeById(int id);
