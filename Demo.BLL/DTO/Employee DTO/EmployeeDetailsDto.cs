@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Azure.Core.Pipeline;
 using Demo.DAL.Models.EmployeeModel;
 using Demo.DAL.Models.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Demo.BLL.DTO.Employee_DTO
@@ -29,5 +30,6 @@ namespace Demo.BLL.DTO.Employee_DTO
         public DateTime LastModifiedOn { get; set; }
         public int? DepartmentId { get; set; }
         public string? Department { get; set; }
+        public string? ImageName { get; set; }
     }
 }

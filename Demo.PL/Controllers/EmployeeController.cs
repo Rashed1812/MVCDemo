@@ -5,10 +5,12 @@ using Demo.BLL.Services.Employee_Services;
 using Demo.DAL.Models.EmployeeModel;
 using Demo.DAL.Models.Shared;
 using Demo.PL.Models.Employee;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController(IEmployeeServices _employeeServices , IWebHostEnvironment _environment, 
         ILogger<EmployeeController> _logger) : Controller
     {
@@ -52,7 +54,8 @@ namespace Demo.PL.Controllers
                         HiringDate = employeeViewModel.HiringDate,
                         Gender = employeeViewModel.Gender,
                         EmployeeType = employeeViewModel.EmployeeType,
-                        DepartmentId = employeeViewModel.DepartmentId
+                        DepartmentId = employeeViewModel.DepartmentId,
+                        Image = employeeViewModel.Image
                     };
 
                     //First step Add Department in db and check Row Effictive Result
@@ -126,7 +129,7 @@ namespace Demo.PL.Controllers
                 Gender =Enum.Parse<Gender>( employee.Gender),
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
                 DepartmentId = employee.DepartmentId,
-
+                //Image = employee.ImageName
             };
             return View(employeeViewModel);
         }
@@ -155,7 +158,8 @@ namespace Demo.PL.Controllers
                     HiringDate = employeeViewModel.HiringDate,
                     Gender = employeeViewModel.Gender,
                     EmployeeType = employeeViewModel.EmployeeType,
-                    DepartmentId = employeeViewModel.DepartmentId
+                    DepartmentId = employeeViewModel.DepartmentId,
+                    Image = employeeViewModel.Image
                 };
 
                 var result = _employeeServices.UpdateEmployee(employeeUpdatedDto);
