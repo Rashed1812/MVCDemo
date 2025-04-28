@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Demo.DAL.Models.EmployeeModel;
 using Demo.DAL.Models.Shared;
+using Microsoft.AspNetCore.Http;
 
 namespace Demo.BLL.DTO.Employee_DTO
 {
@@ -37,5 +38,6 @@ namespace Demo.BLL.DTO.Employee_DTO
         public int CreatedBy { get; set; }
         public int LastModifiedBy { get; set; }
         public int? DepartmentId { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

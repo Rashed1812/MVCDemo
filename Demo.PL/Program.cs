@@ -1,9 +1,14 @@
 using Demo.BLL.Profiles;
 using Demo.BLL.Services;
+using Demo.BLL.Services.AttachmentServices;
+using Demo.BLL.Services.EmailService;
 using Demo.BLL.Services.Employee_Services;
 using Demo.DAL.Data;
 using Demo.DAL.Data.Repositries.Classes;
 using Demo.DAL.Data.Repositries.Interfaces;
+using Demo.DAL.Models.IdentityModel;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -27,12 +32,23 @@ namespace Demo.PL
             });
 
             //Register To Allow DI In Department Repository
-            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepositry>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
-            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbcontext>()
+                .AddDefaultTokenProviders();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(Options =>
+                {
+                    Options.LoginPath = "/Account/Login";
+                    Options.AccessDeniedPath = "/Home/Error";
+                    Options.LogoutPath = "/Account/Login";
+                });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,12 +63,11 @@ namespace Demo.PL
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
 
             app.Run();
         }

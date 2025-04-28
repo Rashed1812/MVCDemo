@@ -1,10 +1,12 @@
 ﻿using Demo.BLL.DTO.Department_DTO;
 using Demo.BLL.Services;
 using Demo.PL.Models.Depaartment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController(IDepartmentServices _departmentsServices,
         ILogger<DepartmentController> _logger, IWebHostEnvironment _environment) : Controller
     {
