@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Demo.BLL.Services.EmailService;
 using Demo.DAL.Models.IdentityModel;
 using Demo.PL.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PL.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> _userManager,SignInManager<ApplicationUser> _signInManager) : Controller
+    public class AccountController(UserManager<ApplicationUser> _userManager,SignInManager<ApplicationUser> _signInManager,IEmailService _emailService) : Controller
     {
         #region Register
         [HttpGet]
@@ -94,11 +95,50 @@ namespace Demo.PL.Controllers
                         Body = url
                     };
                     //Send Email
-
+                    _emailService.SendEmail(email);
+                    return RedirectToAction("CheckYourInbox");
                 }
                 ModelState.AddModelError(string.Empty, "Invalid Operation ,Please Try Again");
             }
             return View(forgetPasswordViewModel);
+        }
+        [HttpGet]
+        public IActionResult CheckYourInbox()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email,string token)
+        {
+            TempData["Email"] = email;
+            TempData["Token"] = token;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            if (ModelState.IsValid) 
+            {
+                var email = TempData["Email"] as string;
+                var token = TempData["Token"] as string;
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user is not null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordViewModel.Password);
+                    if (result.Succeeded)
+                        return RedirectToAction("Login");
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+            }
+            ModelState.AddModelError(string.Empty, "Invalid Operation ,Please Try Again");
+            return View(resetPasswordViewModel);
         }
     }
 }
